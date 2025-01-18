@@ -17,7 +17,6 @@ function broadcast(data) {
 wss.on('connection', (ws) => {
   console.log('New client connected');
 
-  
   connection.query(
     'SELECT * FROM stories WHERE timestamp >= NOW() - INTERVAL 5 MINUTE ORDER BY timestamp DESC',
     (err, results) => {

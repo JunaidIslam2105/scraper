@@ -71,14 +71,14 @@
       const a = document.createElement('a');
       a.href = story.url;
       a.textContent = story.title;
-      a.target = '_blank';  // Open links in new tab
+      a.target = '_blank';  
       li.appendChild(a);
       return li;
     }
 
     ws.onclose = () => {
       console.log('Disconnected from WebSocket server');
-      // Optional: Attempt to reconnect after a delay
+      
       setTimeout(() => {
         window.location.reload();
       }, 5000);
