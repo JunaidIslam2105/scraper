@@ -64,18 +64,10 @@ node src/index.js
 node src/index.js
 ```
 
-2. Open your browser and navigate to:
-```
-http://localhost:3000
-```
+2. Run the index.html file in the project directory.
+
 
 3. You should see the real-time story feed start populating automatically.
-
-### WebSocket Client Implementation
-
-To implement your own client:
-
-Run the index.html file in the project directory.
 
 ## Database Schema
 
