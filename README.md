@@ -64,7 +64,7 @@ node src/index.js
 node src/index.js
 ```
 
-2. Run the index.html file in the project directory.
+2. Run the client.html file in the project root directory.
 
 
 3. You should see the real-time story feed start populating automatically.
