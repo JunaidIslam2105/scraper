@@ -122,10 +122,6 @@ CREATE TABLE IF NOT EXISTS stories(
 }
 ```
 
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
 ## Acknowledgments
 
 - [Hacker News API](https://github.com/HackerNews/API)
