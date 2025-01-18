@@ -8,21 +8,20 @@ async function scrapeHackerNews() {
     const stories = [];
 
     $('.athing').each((index, element) => {
-      const title = $(element).find('.titleline a').text().trim();
-      const url = $(element).find('.titleline a').attr('href');
-      const id = $(element).attr('id');
+        const title = $(element).find('.titleline a').text().trim();
+        const url = $(element).find('.titleline a').attr('href');
+        const author = $(element).next().find('.hnuser').text().trim();
+        const scoreText = $(element).next().find('.score').text().trim();
+        const score = scoreText ? parseInt(scoreText.replace(' points', '').trim(), 10) : 0;
 
-      if (title && url) {
-        stories.push({
-          id,
-          title,
-          url: url.startsWith('http') ? url : `https://news.ycombinator.com/${url}`, 
+        if (title && url) {
+            stories.push({ title, url, author, score });
+            saveStoryToDB({ title, url, author, score });
+          }
         });
-      }
-    });
-
-    console.log('Scraped stories:', stories);
-    return stories;
+    
+        console.log('Scraped stories:', stories);
+        return stories;
   } catch (error) {
     console.error('Error scraping Hacker News:', error);
     return [];
