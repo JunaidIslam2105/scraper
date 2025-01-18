@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker News WebSocket Client</title>
+  <style>
+    .new-story {
+      animation: highlight 2s ease-out;
+    }
+    @keyframes highlight {
+      from { background-color: #ffffa0; }
+      to { background-color: transparent; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Real-time Hacker News Stories</h1>
+  <div id="recent-count"></div>
+  <ul id="stories-list"></ul>
+
+  <script>
+    const ws = new WebSocket('ws://localhost:8080');
+    const displayedStories = new Set();
+
+    ws.onopen = () => {
+      console.log('Connected to WebSocket server');
+    };
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log('Received message:', data);
+
+      if (data.type === 'initial') {
+        handleInitialStories(data.stories);
+      } else if (data.type === 'new_story') {
+        handleNewStories(data.stories);
+      }
+    };
+
+    function handleInitialStories(stories) {
+      document.getElementById('recent-count').innerText = 
+        `Stories in the last 5 minutes: ${stories.length}`;
+      
+      const storiesList = document.getElementById('stories-list');
+      storiesList.innerHTML = '';
+
+      stories.forEach(story => {
+        if (!displayedStories.has(story.url)) {
+          displayedStories.add(story.url);
+          storiesList.appendChild(createStoryElement(story));
+        }
+      });
+    }
+
+    function handleNewStories(stories) {
+      const storiesList = document.getElementById('stories-list');
+      
+      stories.forEach(story => {
+        if (!displayedStories.has(story.url)) {
+          displayedStories.add(story.url);
+          const li = createStoryElement(story);
+          li.classList.add('new-story');
+          storiesList.insertBefore(li, storiesList.firstChild);
+        }
+      });
+    }
+
+    function createStoryElement(story) {
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = story.url;
+      a.textContent = story.title;
+      a.target = '_blank';  // Open links in new tab
+      li.appendChild(a);
+      return li;
+    }
+
+    ws.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+      // Optional: Attempt to reconnect after a delay
+      setTimeout(() => {
+        window.location.reload();
+      }, 5000);
+    };
+  </script>
+</body>
+</html>
